@@ -1,0 +1,23 @@
+{
+  "name": "cordova-smartsdk",
+  "version": "2.0.0",
+  "description": "A Custom plugin to simplify IDCHECKIO Sdk integration",
+  "cordova": {
+    "id": "cordova-smartsdk",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "keywords": [
+    "cordova",
+    "plugin",
+    "ariadnext",
+    "sdk",
+    "IDCHECK.IO",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "mlegendre",
+  "license": "ISC"
+}

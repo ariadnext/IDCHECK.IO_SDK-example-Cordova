@@ -1,0 +1,24 @@
+# Mac
+.DS_Store
+
+# Node
+npm-debug.log
+**/node_modules
+
+# Cordova
+**/platforms
+**/plugins
+
+# res
+**/resources/signing
+
+# Created by https://www.gitignore.io/api/apachecordova
+# Edit at https://www.gitignore.io/?templates=apachecordova
+
+### ApacheCordova ###
+# Apache Cordova generated files and directories
+**/bin/*
+!**/plugins/android.json
+!**/plugins/fetch.json
+
+# End of https://www.gitignore.io/api/apachecordova
