@@ -1,0 +1,29 @@
+repositories{
+  maven {
+    credentials {
+      username = "$YOUR_USERNAME"
+      password = "$YOUR_PASSWORD"
+    }
+    url "https://repoman.rennes.ariadnext.com/content/repositories/com.ariadnext.idcheckio/"
+  }
+}
+
+dependencies {
+  implementation('com.ariadnext.android.idcheckio:sdk:5.3.0-demo@aar') {
+    transitive = true
+  }
+}
+
+android {
+  defaultConfig {
+    multiDexEnabled true
+  }
+
+  packagingOptions {
+    pickFirst 'META-INF/NOTICE'
+    pickFirst 'META-INF/LICENSE'
+    pickFirst 'META-INF/license.txt'
+    pickFirst 'META-INF/notice.txt'
+    pickFirst 'META-INF/DEPENDENCIES'
+  }
+}
