@@ -21,6 +21,7 @@
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <activity
                 android:name="com.ariadnext.idcheckio.IdcheckioActivity"
+                android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
                 android:screenOrientation="portrait"
                 android:configChanges="orientation|screenSize">
             </activity>

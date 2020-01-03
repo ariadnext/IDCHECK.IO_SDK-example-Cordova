@@ -9,7 +9,7 @@ repositories{
 }
 
 dependencies {
-  implementation('com.ariadnext.android.idcheckio:sdk:5.3.0-demo@aar') {
+  implementation('com.ariadnext.android.idcheckio:sdk:5.3.1-demo@aar') {
     transitive = true
   }
 }
