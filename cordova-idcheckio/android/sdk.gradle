@@ -1,4 +1,5 @@
 repositories{
+    mavenLocal()
   maven {
     credentials {
       username = "$YOUR_USERNAME"
@@ -9,7 +10,7 @@ repositories{
 }
 
 dependencies {
-  implementation('com.ariadnext.android.idcheckio:sdk:5.3.1-demo@aar') {
+  implementation('com.ariadnext.android.idcheckio:sdk:5.4.2@aar') {
     transitive = true
   }
 }

@@ -71,8 +71,11 @@ function activate(){
         "license",
         "true",
         "false",
+        "true",
+        "DEMO",
         function(){
             this.isInitialized = true;
+            alert("Activation done with success.");
         },
         function(error){
             this.isInitialized = false;
@@ -93,11 +96,16 @@ function start(){
                 'DataRequirement': 'DECODED',
                 'FaceDetection': 'ENABLED'
             },
-           'ScanBothSides': 'ENABLED'
+            'ScanBothSides': 'ENABLED',
+            'ExtraParams': {
+                'Language': "fr",
+                'AdjustCrop': 'true'
+            }
         };
         sdk.start(
             JSON.stringify(map),
             function(results){
+                alert(results);
                 result = JSON.parse(results);
                 $("#name").text("SDK Success").text();
             },
@@ -113,30 +121,71 @@ function start(){
 6. To start an online capture of a document, you have the method the `startOnline()` method. You will receive the result in a string that can be parse into a json object.
 ```javascript
 function startOnline(){
+        var map = {
+            'DocumentType': 'ID',
+            'Orientation': 'LANDSCAPE',
+            'ConfirmType': 'DATA_OR_PICTURE',
+            'Side1Extraction': {
+                'DataRequirement': 'DECODED',
+                'FaceDetection': 'ENABLED'
+            },
+           'ScanBothSides': 'ENABLED',
+           'ExtraParams': {
+                'SdkEnvironment': "DEMO"
+            }
+        };
+        var cisContext = {};
+        sdk.startOnline(
+            JSON.stringify(map),
+            JSON.stringify(cisContext),
+            function(results){
+                alert(results);
+                result = JSON.parse(results);
+                $("#name").text("ID Scan Success").text();
+            },
+            function(error){
+                alert(error);
+            }
+        );
+}
+```    
+7. To start an online capture of a document, you have the method the `analyze()` method. You will receive the result in a string that can be parse into a json object.
+```javascript
+function analyze(){
     var map = {
         'DocumentType': 'ID',
-        'Orientation': 'LANDSCAPE',
-        'ConfirmType': 'DATA_OR_PICTURE',
         'Side1Extraction': {
             'DataRequirement': 'DECODED',
             'FaceDetection': 'ENABLED'
         },
-       'ScanBothSides': 'ENABLED'
+        'ExtraParams': {
+             'SdkEnvironment': "DEMO"
+         }
     };
     var cisContext = {};
-    sdk.startOnline(
-        JSON.stringify(map),
-        "license",
-        JSON.stringify(cisContext),
-        "false",
-        function(results){
-            result = JSON.parse(results);
-            $("#name").text("ID Scan Success").text();
-        },
-        function(error){
-            alert(error);
-        }
+    window.imagePicker.getPictures(
+        function(results) {
+            sdk.analyze(
+                JSON.stringify(map),
+                results[0],
+                "",
+                "true",
+                JSON.stringify(cisContext),
+                function(results){
+                    alert(results);
+                    result = JSON.parse(results);
+                    $("#name").text("ID Scan Success").text();
+                },
+                function(error){
+                    alert(error);
+                }
+            );
+	      }, function (error) {
+          alert(error);
+	      }, {
+		        maximumImagesCount: 1
+	      }
     );
 }
-```    
+```   
   > ✅ &nbsp; To learn more informations on those methods and theirs parameters. Please refer to the official [IDCheck.io sdk](https://support.ariadnext.com) documentation.

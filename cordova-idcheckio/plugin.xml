@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-idcheckio" version="1.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-idcheckio" version="5.4.2" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <name>IDCheck.io SDK Plugin</name>
 
@@ -21,8 +21,8 @@
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <activity
                 android:name="com.ariadnext.idcheckio.IdcheckioActivity"
-                android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
                 android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
                 android:configChanges="orientation|screenSize">
             </activity>
         </config-file>
@@ -41,6 +41,7 @@
         <framework src="androidx.constraintlayout:constraintlayout:2.0.0-beta1" />
         <framework custom="true" src="android/sdk.gradle" type="gradleReference" />
         <source-file src="android/IdcheckioSdk.java" target-dir="app/src/main/java/com/ariadnext/idcheckio" />
+        <source-file src="android/ParameterUtils.java" target-dir="app/src/main/java/com/ariadnext/idcheckio" />
         <source-file src="android/IdcheckioActivity.java" target-dir="app/src/main/java/com/ariadnext/idcheckio" />
     </platform>
     <platform name="ios">
@@ -56,7 +57,7 @@
                 <source url="https://git-externe.rennes.ariadnext.com/idcheckio/axt-podspecs.git"/>
             </config>
             <pods use-frameworks="true">
-                <pod name="IDCheckIOSDK" spec="~> 5.2.0"/>
+                <pod name="IDCheckIOSDK" spec="~> 5.4.2-legacy"/>
             </pods>
         </podspec>
         <source-file src="ios/IdcheckioSdk.m" />

@@ -1,11 +1,12 @@
 {
   "name": "cordova-idcheckio",
-  "version": "1.0.0",
+  "version": "5.4.2",
   "description": "Custom plugin simplifying IDCheck.io Sdk integration on a cordova project",
   "cordova": {
     "id": "cordova-idcheckio",
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   },
   "keywords": [
@@ -15,7 +16,8 @@
     "idcheck.io",
     "sdk",
     "ecosystem:cordova",
-    "cordova-android"
+    "cordova-android",
+    "cordova-ios"
   ],
   "author": "Matthieu Legendre",
   "license": "ISC"

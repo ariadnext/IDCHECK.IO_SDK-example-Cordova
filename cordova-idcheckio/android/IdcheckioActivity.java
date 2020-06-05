@@ -13,18 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.ariadnext.idcheckio.sdk.bean.CISContext;
-import com.ariadnext.idcheckio.sdk.bean.ConfirmationType;
-import com.ariadnext.idcheckio.sdk.bean.DataRequirement;
-import com.ariadnext.idcheckio.sdk.bean.DocumentType;
-import com.ariadnext.idcheckio.sdk.bean.Extraction;
-import com.ariadnext.idcheckio.sdk.bean.FaceDetection;
-import com.ariadnext.idcheckio.sdk.bean.FeedbackLevel;
-import com.ariadnext.idcheckio.sdk.bean.FileSize;
-import com.ariadnext.idcheckio.sdk.bean.Forceable;
-import com.ariadnext.idcheckio.sdk.bean.Language;
-import com.ariadnext.idcheckio.sdk.bean.Orientation;
 import com.ariadnext.idcheckio.sdk.component.IdcheckioView;
 import com.ariadnext.idcheckio.sdk.interfaces.ErrorMsg;
+import com.ariadnext.idcheckio.sdk.interfaces.IdcheckioError;
 import com.ariadnext.idcheckio.sdk.interfaces.IdcheckioInteraction;
 import com.ariadnext.idcheckio.sdk.interfaces.IdcheckioInteractionInterface;
 import com.ariadnext.idcheckio.sdk.interfaces.cis.CISType;
@@ -33,8 +24,6 @@ import com.ariadnext.idcheckio.sdk.utils.ExtensionUtilsKt;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Iterator;
 
 public class IdcheckioActivity extends FragmentActivity implements IdcheckioInteractionInterface {
     private final static int CONTAINER_ID = 1234801625;
@@ -49,82 +38,14 @@ public class IdcheckioActivity extends FragmentActivity implements IdcheckioInte
         FrameLayout rootLayout = new FrameLayout(this);
         rootLayout.setId(CONTAINER_ID);
         setContentView(rootLayout);
-        IdcheckioView.Builder idcheckioView = new IdcheckioView.Builder()
-                .listener(this);
-        Intent intent = getIntent();
-        String params = intent.getStringExtra("PARAMS");
-        String licenceFileName = intent.getStringExtra("LICENCE");
-        String cisContext = intent.getStringExtra("CIS");
-        boolean disableImei = intent.getBooleanExtra("IMEI", true);
-        String action = intent.getStringExtra("ACTION");
-        try {
-            JSONObject jsonParams = new JSONObject(params);
-            Iterator<String> keys = jsonParams.keys();
-            while (keys.hasNext()) {
-                String key = keys.next();
-                String value = jsonParams.getString(key);
-                switch (key) {
-                    case "DocumentType":
-                        idcheckioView.docType(DocumentType.valueOf(value));
-                        break;
-                    case "Orientation":
-                        idcheckioView.orientation(Orientation.valueOf(value));
-                        break;
-                    case "ConfirmType":
-                        idcheckioView.confirmType(ConfirmationType.valueOf(value));
-                        break;
-                    case "UseHd":
-                        idcheckioView.useHd(Boolean.parseBoolean(value));
-                        break;
-                    case "ScanBothSides":
-                        idcheckioView.scanBothSides(Forceable.valueOf(value));
-                        break;
-                    case "Side1Extraction":
-                        JSONObject side1 = new JSONObject(value);
-                        idcheckioView.sideOneExtraction(new Extraction(DataRequirement.valueOf(side1.getString("DataRequirement")),
-                                FaceDetection.valueOf(side1.getString("FaceDetection"))));
-                        break;
-                    case "Side2Extraction":
-                        JSONObject side2 = new JSONObject(value);
-                        idcheckioView.sideTwoExtraction(new Extraction(DataRequirement.valueOf(side2.getString("DataRequirement")),
-                                FaceDetection.valueOf(side2.getString("FaceDetection"))));
-                        break;
-                    case "ExtraParams":
-                        JSONObject extraParams = new JSONObject(value);
-                        Iterator<String> extraKeys = extraParams.keys();
-                        while (extraKeys.hasNext()) {
-                            String extraKey = extraKeys.next();
-                            switch (extraKey) {
-                                case "AdjustCrop":
-                                    idcheckioView.adjustCrop(Boolean.parseBoolean(extraParams.getString(extraKey)));
-                                    break;
-                                case "Language":
-                                    idcheckioView.language(Language.valueOf(extraParams.getString(extraKey)));
-                                    break;
-                                case "ManualButtonTimer":
-                                    idcheckioView.manualButtonTimer(Integer.parseInt(extraParams.getString(extraKey)));
-                                    break;
-                                case "MaxPictureFilesize":
-                                    idcheckioView.maxPictureFilesize(FileSize.valueOf(extraParams.getString(extraKey)));
-                                    break;
-                                case "FeedbackLevel":
-                                    idcheckioView.feedbackLevel(FeedbackLevel.valueOf(extraParams.getString(extraKey)));
-                                    break;
-                                case "Token":
-                                    idcheckioView.token(extraParams.getString(extraKey));
-                                    break;
-                                case "ConfirmAbort":
-                                    idcheckioView.confirmAbort(Boolean.parseBoolean(extraParams.getString(extraKey)));
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
+        try{
+            IdcheckioView.Builder idcheckioView = new IdcheckioView.Builder()
+                    .listener(this);
+            Intent intent = getIntent();
+            String params = intent.getStringExtra("PARAMS");
+            String cisContext = intent.getStringExtra("CIS");
+            String action = intent.getStringExtra("ACTION");
+            ParameterUtils.parseParameters(idcheckioView, params);
             IdcheckioView idcheckio = idcheckioView.build();
             getSupportFragmentManager().beginTransaction().replace(CONTAINER_ID, idcheckio).commit();
             switch (action) {
@@ -138,24 +59,22 @@ public class IdcheckioActivity extends FragmentActivity implements IdcheckioInte
                     if (!cisTypeString.isEmpty()) {
                         cisType = CISType.valueOf(cisTypeString);
                     }
-                    idcheckio.startOnline(licenceFileName,
-                            new CISContext(cis.optString("folderUid"),
-                                    cis.optString("referenceTaskUid"),
-                                    cis.optString("referenceDocUid"),
-                                    cisType
-                            ), disableImei);
+                    idcheckio.startOnline(new CISContext(cis.optString("folderUid"),
+                            cis.optString("referenceTaskUid"),
+                            cis.optString("referenceDocUid"),
+                            cisType
+                    ));
                     break;
                 default:
                     break;
             }
         } catch (JSONException ex) {
             Intent exIntent = new Intent();
-            exIntent.putExtra("IDCHECKIO_ERROR_TYPE", "WRONG_PARAMETERS");
-            exIntent.putExtra("IDCHECKIO_ERROR_MESSAGE", ex.getMessage());
+            exIntent.putExtra("ERROR_MSG", ExtensionUtilsKt.toJson(new ErrorMsg(IdcheckioError.INCOMPATIBLE_PARAMETERS, null, ex.getMessage())));
             this.setResult(RESULT_CANCELED, exIntent);
             this.finish();
         } catch (IllegalArgumentException ex) {
-            Log.e("IdceckioActivity", "Failed to parse parameters", ex);
+            Log.e("IdcheckioActivity", "Failed to parse parameters", ex);
         }
     }
 
@@ -169,12 +88,9 @@ public class IdcheckioActivity extends FragmentActivity implements IdcheckioInte
                 this.finish();
                 break;
             case ERROR:
-                ErrorMsg errorMsg = (ErrorMsg) data;
                 Intent errorIntent = new Intent();
-                if (errorMsg != null) {
-                    errorIntent.putExtra("IDCHECKIO_ERROR_TYPE", errorMsg.getType());
-                    errorIntent.putExtra("IDCHECKIO_ERROR_CODE", errorMsg.getCode());
-                    errorIntent.putExtra("IDCHECKIO_ERROR_MESSAGE", errorMsg.getMessage());
+                if (data != null) {
+                    errorIntent.putExtra("ERROR_MSG", ExtensionUtilsKt.toJson((ErrorMsg) data));
                 }
                 this.setResult(RESULT_CANCELED, errorIntent);
                 this.finish();

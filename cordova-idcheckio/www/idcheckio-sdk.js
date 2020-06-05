@@ -4,13 +4,16 @@ function IdcheckioSdk(){}
 IdcheckioSdk.preload = function(extractData){
     exec(function(){}, function(){}, 'IdcheckioSdk', 'preload', [extractData]);
 };
-IdcheckioSdk.activate = function(licenseFilename, extractData, disableImei, onSuccess, onFail){
-    exec(onSuccess, onFail, 'IdcheckioSdk', 'activate', [licenseFilename, extractData, disableImei]);
+IdcheckioSdk.activate = function(licenseFilename, extractData, disableImei, disableAudioForLiveness, environment, onSuccess, onFail){
+    exec(onSuccess, onFail, 'IdcheckioSdk', 'activate', [licenseFilename, extractData, disableImei, disableAudioForLiveness, environment]);
 };
 IdcheckioSdk.start = function(parametersMap, onSuccess, onFail){
     exec(onSuccess, onFail, 'IdcheckioSdk', 'start', [parametersMap]);
 };
-IdcheckioSdk.startOnline = function(parametersMap, licenseFilename, cisContext, disableImei, onSuccess, onFail){
-    exec(onSuccess, onFail, 'IdcheckioSdk', 'startOnline', [parametersMap, licenseFilename, cisContext, disableImei]);
+IdcheckioSdk.startOnline = function(parametersMap, cisContext, onSuccess, onFail){
+    exec(onSuccess, onFail, 'IdcheckioSdk', 'startOnline', [parametersMap, cisContext]);
+};
+IdcheckioSdk.analyze = function(parametersMap, side1ToUpload, side2ToUpload, isOnline, cisContext, onSuccess, onFail){
+    exec(onSuccess, onFail, 'IdcheckioSdk', 'analyze', [parametersMap, side1ToUpload, side2ToUpload, isOnline, cisContext])
 };
 module.exports = IdcheckioSdk;

@@ -53,6 +53,8 @@ function activate(){
         "license",
         "true",
         "false",
+        "true",
+        "DEMO",
         function(){
             this.isInitialized = true;
             console.log("Activation done with success.");
@@ -83,8 +85,6 @@ function start(){
                 'AdjustCrop': 'true'
             }
         };
-        console.log(map);
-        console.log(JSON.stringify(map));
         sdk.start(
             JSON.stringify(map),
             function(results){
@@ -114,16 +114,15 @@ function startOnline(){
                 'DataRequirement': 'DECODED',
                 'FaceDetection': 'ENABLED'
             },
-           'ScanBothSides': 'ENABLED'
+           'ScanBothSides': 'ENABLED',
+           'ExtraParams': {
+                'SdkEnvironment': "DEMO"
+            }
         };
         var cisContext = {};
-        console.log(map);
-        console.log(JSON.stringify(map));
         sdk.startOnline(
             JSON.stringify(map),
-            "license",
             JSON.stringify(cisContext),
-            "false",
             function(results){
                 console.log(results);
                 alert(results);
@@ -139,23 +138,22 @@ function startOnline(){
 }
 
 function startLiveness(){
-    console.log("startLiveness");
+   console.log("startLiveness");
    var map = {
         'DocumentType': 'LIVENESS',
-        'Orientation': 'PORTRAIT'
+        'Orientation': 'PORTRAIT',
+        'ExtraParams': {
+             'SdkEnvironment': "DEMO"
+         }
     };
     var cisContext = {
         'referenceDocUid': result.documentUid,
         'referenceTaskUid': result.taskUid,
         'folderUid': result.folderUid
     };
-    console.log(map);
-    console.log(JSON.stringify(map));
     sdk.startOnline(
         JSON.stringify(map),
-        "license",
         JSON.stringify(cisContext),
-        "false",
         function(results){
             console.log(results);
             alert(results);
@@ -167,6 +165,47 @@ function startLiveness(){
             console.log(error);
             alert(error);
         }
+    );
+}
+
+function analyze(){
+    console.log("analyze");
+    var map = {
+        'DocumentType': 'ID',
+        'Side1Extraction': {
+            'DataRequirement': 'DECODED',
+            'FaceDetection': 'ENABLED'
+        },
+        'ExtraParams': {
+             'SdkEnvironment': "DEMO"
+         }
+    };
+    var cisContext = {};
+    window.imagePicker.getPictures(
+        function(results) {
+            sdk.analyze(
+                JSON.stringify(map),
+                results[0],
+                "",
+                "true",
+                JSON.stringify(cisContext),
+                function(results){
+                    console.log(results);
+                    alert(results);
+                    result = JSON.parse(results);
+                    console.log(JSON.stringify(results));
+                    $("#name").text("ID Scan Success").text();
+                },
+                function(error){
+                    console.log(error);
+                    alert(error);
+                }
+            );
+	      }, function (error) {
+		        console.log('Error: ' + error);
+	      }, {
+		        maximumImagesCount: 1
+	      }
     );
 }
 
@@ -188,4 +227,9 @@ $( "#startOnline" ).click(function() {
 $( "#startLiveness" ).click(function() {
     console.log("startLiveness");
     startLiveness();
+})
+
+$( "#analyze" ).click(function() {
+    console.log("analyze");
+    analyze();
 })

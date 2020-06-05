@@ -17,6 +17,8 @@
 
 - (void) startOnline:(CDVInvokedUrlCommand*)command;
 
+- (void) analyze:(CDVInvokedUrlCommand*)command;
+
 @end
 
 #endif

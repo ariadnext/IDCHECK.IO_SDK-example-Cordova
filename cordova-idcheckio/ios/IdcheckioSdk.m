@@ -13,9 +13,12 @@ NSString* callback;
 
 - (void) activate:(CDVInvokedUrlCommand*)command{
     NSString* licenceFileName = command.arguments[0];
-    BOOL extractData = command.arguments[1];
+    BOOL disableImei = command.arguments[1];
+    BOOL extractData = command.arguments[2];
+    BOOL disableAudioForLiveness = command.arguments[3];
+    NSString* sdkEnvironment = command.arguments[4];
     callback = command.callbackId;
-    [Idcheckio.shared activateWithLicenseFilename:licenceFileName extractData:extractData onComplete:^(NSException* error){
+    [Idcheckio.shared activateWithLicenseFilename:licenceFileName extractData:extractData disableAudioForLiveness:disableAudioForLiveness sdkEnvironment:sdkEnvironment onComplete:^(NSException* error){
         if(error == nil){
             [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:callback];
         } else {
@@ -114,6 +117,8 @@ NSString* callback;
                     Idcheckio.shared.extraParameters.confirmAbort = [[extraParams objectForKey:extraKey] boolValue];
                 } else if([extraKey isEqualToString:AdjustCrop]){
                     Idcheckio.shared.extraParameters.adjustCrop = [[extraParams objectForKey:extraKey] boolValue];
+                } else if([extraKey isEqualToString:SdkEnvironment]){
+                    Idcheckio.shared.extraParameters.sdkEnvironment = [extraParams objectForKey:extraKey];
                 }
             }
         }
@@ -125,8 +130,7 @@ NSString* callback;
     NSData *data = [command.arguments[0] dataUsingEncoding:NSUTF8StringEncoding];
     id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     SDKParams* params = [self getParamsFromJson:json];
-    NSString* licenceFileName = command.arguments[1];
-    NSData *cisData = [command.arguments[2] dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *cisData = [command.arguments[1] dataUsingEncoding:NSUTF8StringEncoding];
     id cisJson = [NSJSONSerialization JSONObjectWithData:cisData options:0 error:nil];
     CISContext* cisContext = [self getCisContextFromJson:cisJson];
     callback = command.callbackId;
@@ -152,7 +156,7 @@ NSString* callback;
         [[cameraView.bottomAnchor constraintEqualToAnchor:sdkViewController.view.bottomAnchor] setActive:true];
 
         [self.viewController presentViewController:sdkViewController animated:true completion:^{
-            [Idcheckio.shared startOnlineWith:cameraView licenseFilename:licenceFileName cisContext:cisContext completion:^(NSError *error) {
+            [Idcheckio.shared startOnlineWith:cameraView cisContext:cisContext completion:^(NSError *error) {
                 if(error != nil){
                     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]] callbackId:callback];
                 }
@@ -160,6 +164,25 @@ NSString* callback;
         }];
     });
 
+}
+
+- (void) analyze:(CDVInvokedUrlCommand*)command {
+    NSData *data = [command.arguments[0] dataUsingEncoding:NSUTF8StringEncoding];
+    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    SDKParams* params = [self getParamsFromJson:json];
+    NSString* side1 = command.arguments[1];
+    NSString* side2 = command.arguments[2];
+    BOOL online = command.arguments[3];
+    NSData *cisData = [command.arguments[4] dataUsingEncoding:NSUTF8StringEncoding];
+    callback = command.callbackId;
+    Idcheckio.shared.delegate = self;
+    id cisJson = [NSJSONSerialization JSONObjectWithData:cisData options:0 error:nil];
+    CISContext* cisContext = [self getCisContextFromJson:cisJson];
+    NSURL *url1 = [NSURL URLWithString:[side1 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+    NSURL *url2 = [NSURL URLWithString:[side2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+    UIImage *side1Image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:url1]];
+    UIImage *side2Image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:url2]];
+    [Idcheckio.shared analyzeWithParams:params side1Image:side1Image side2Image:side2Image online:online context:cisContext];
 }
 
 - (BOOL) getBooleanFromString:(NSString*)string {
