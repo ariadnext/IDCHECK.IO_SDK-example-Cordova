@@ -16,7 +16,7 @@ NSString* callback;
     BOOL disableImei = command.arguments[1];
     BOOL extractData = command.arguments[2];
     BOOL disableAudioForLiveness = command.arguments[3];
-    NSString* sdkEnvironment = command.arguments[4];
+    NSString* sdkEnvironment = [command.arguments[4] lowercaseString];
     callback = command.callbackId;
     [Idcheckio.shared activateWithLicenseFilename:licenceFileName extractData:extractData disableAudioForLiveness:disableAudioForLiveness sdkEnvironment:sdkEnvironment onComplete:^(NSException* error){
         if(error == nil){
@@ -156,7 +156,7 @@ NSString* callback;
         [[cameraView.bottomAnchor constraintEqualToAnchor:sdkViewController.view.bottomAnchor] setActive:true];
 
         [self.viewController presentViewController:sdkViewController animated:true completion:^{
-            [Idcheckio.shared startOnlineWith:cameraView cisContext:cisContext completion:^(NSError *error) {
+            [Idcheckio.shared startOnlineWith:cameraView cisContext:cisContext  externalAuthenticationDelegate:nil completion:^(NSError *error) {
                 if(error != nil){
                     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]] callbackId:callback];
                 }
@@ -182,7 +182,7 @@ NSString* callback;
     NSURL *url2 = [NSURL URLWithString:[side2 stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
     UIImage *side1Image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:url1]];
     UIImage *side2Image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:url2]];
-    [Idcheckio.shared analyzeWithParams:params side1Image:side1Image side2Image:side2Image online:online context:cisContext];
+    [Idcheckio.shared analyzeWithParams: params side1Image:side1Image side2Image:side2Image online:online cisContext:cisContext];
 }
 
 - (BOOL) getBooleanFromString:(NSString*)string {
@@ -206,3 +206,4 @@ NSString* callback;
 }
 
 @end
+
