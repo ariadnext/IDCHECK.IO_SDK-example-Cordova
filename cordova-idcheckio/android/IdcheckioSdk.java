@@ -92,7 +92,8 @@ public class IdcheckioSdk extends CordovaPlugin implements IdcheckioCallback, Id
                     new CISContext(cis.optString("folderUid"),
                             cis.optString("referenceTaskUid"),
                             cis.optString("referenceDocUid"),
-                            cisType));
+                            cisType,
+                            cis.optBoolean("biometricConsent")));
         } catch (JSONException ex){
             this.callbackContext.error(ExtensionUtilsKt.toJson(new ErrorMsg(IdcheckioError.INCOMPATIBLE_PARAMETERS, null, ex.getMessage())));
         }

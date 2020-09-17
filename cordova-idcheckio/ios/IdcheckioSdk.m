@@ -72,6 +72,8 @@ NSString* callback;
             [cisContext setReferenceTaskUid:[json objectForKey:key]];
         } else if([key isEqualToString:referenceDocUid]){
             [cisContext setReferenceDocUid:[json objectForKey:key]];
+        }  else if([key isEqualToString:biometricConsent]){
+            [cisContext setBiometricConsentWithBiometricConsent:[json objectForKey:key]];
         }
     }
     return cisContext;

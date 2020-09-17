@@ -26,5 +26,6 @@
 #define referenceDocUid @"referenceDocUid"
 #define referenceTaskUid @"referenceTaskUid"
 #define folderUid @"folderUid"
+#define biometricConsent @"biometricConsent"
 
 #endif /* Header_h */
