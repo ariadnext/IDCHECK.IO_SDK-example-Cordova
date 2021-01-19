@@ -1,6 +1,6 @@
 {
   "name": "cordova-idcheckio",
-  "version": "5.4.2",
+  "version": "5.9.0",
   "description": "Custom plugin simplifying IDCheck.io Sdk integration on a cordova project",
   "cordova": {
     "id": "cordova-idcheckio",

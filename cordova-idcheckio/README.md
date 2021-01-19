@@ -25,8 +25,7 @@ $ plugman install --platform ios --project ABSOLUTE_PATH_TO_YOUR_PROJECT_FOLDER/
 ## Platform's specific configuration
 
 ### ios
-
-1. Before starting, to download the sdk dependency, you will need to have git lfs configured in your project. If you have not, use : `git lfs install`
+1. Before starting, to download the sdk dependency, You will need to have a .netrc file configurated with our credentials. Check the official documentation for more informations.
 2. The min ios version supported by the sdk is 10.0, to the min ios version of your project you can add this line in your config.xml: `<preference name="deployment-target" value="10.0" />`
 3. In the IdcheckioSdk.m file, you will need to change the following header with your project name : `#import "YOUR_PROJECT_NAME-Swift.h"`
 4. Add your SDK's license file in your app's source folder (containing your app's `Info.plist`):
@@ -34,7 +33,7 @@ $ plugman install --platform ios --project ABSOLUTE_PATH_TO_YOUR_PROJECT_FOLDER/
   PATH_TO_YOUR_PROJECT_FOLDER/platforms/ios/SOURCE_FOLDER/YOUR_LICENCE_NAME.axt
   ```
   > ✅ &nbsp; Don't forget to add the licence file to your app bundle (check it in project navigator: `APP_TARGET` ➜ `Build Phases` ➜ `Copy Bundle Resources` ➜ Add `YOUR_LICENCE_NAME.axt` if not present in the list ).
-5. Go to YOUR_TARGET > Build Settings > Swift Language Version > set it to at least 4.2.
+5. Go to YOUR_TARGET > Build Settings > Swift Language Version > set it to 5.
 6. Go to YOUR_TARGET > Build Settings > Enable Bitcode > set it to Yes.
 7. Run your project (`Cmd+R`), you're done !  &nbsp; 🎉
 

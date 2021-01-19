@@ -55,9 +55,13 @@ NSString* callback;
 
         [self.viewController presentViewController:sdkViewController animated:true completion:^{
             [Idcheckio.shared startWith:cameraView completion:^(NSError *error) {
-                if(error != nil){
-                    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]] callbackId:callback];
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.viewController dismissViewControllerAnimated:true completion:^{
+                        if(error != nil){
+                            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]] callbackId:callback];
+                        }
+                    }];
+                });
             }];
         }];
     });
@@ -106,11 +110,11 @@ NSString* callback;
             id extraParams = [json objectForKey:key];
             for(NSString* extraKey in [extraParams allKeys]){
                 if([extraKey isEqualToString:Language]){
-                    Idcheckio.shared.extraParameters.language = [extraParams objectForKey:extraKey];
+                    [Idcheckio.shared.extraParameters setLanguage:[extraParams objectForKey:extraKey]];
                 } else if([extraKey isEqualToString:ManualButtonTimer]){
                     Idcheckio.shared.extraParameters.manualButtonTimer = [extraParams doubleForKey:extraKey];
                 } else if([extraKey isEqualToString:MaxPictureFilesize]){
-                    [Idcheckio.shared.extraParameters setMaxPictureFilesize:[extraParams integerForKey:extraKey]];
+                    [Idcheckio.shared.extraParameters setMaxPictureFilesize:[extraParams stringForKey:extraKey]];
                 } else if([extraKey isEqualToString:FeedbackLevel]){
                     [Idcheckio.shared.extraParameters setFeedbackLevel:[extraParams objectForKey:extraKey]];
                 } else if([extraKey isEqualToString:Token]){
@@ -159,9 +163,13 @@ NSString* callback;
 
         [self.viewController presentViewController:sdkViewController animated:true completion:^{
             [Idcheckio.shared startOnlineWith:cameraView cisContext:cisContext  externalAuthenticationDelegate:nil completion:^(NSError *error) {
-                if(error != nil){
-                    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]] callbackId:callback];
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.viewController dismissViewControllerAnimated:true completion:^{
+                        if(error != nil){
+                            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]] callbackId:callback];
+                        }
+                    }];
+                });
             }];
         }];
     });
@@ -198,14 +206,14 @@ NSString* callback;
 
 - (void)idcheckioFinishedWithResult:(IdcheckioResult * _Nullable)result error:(NSError * _Nullable)error {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.viewController dismissViewControllerAnimated:true completion:^{}];
+        [self.viewController dismissViewControllerAnimated:true completion:^{
+            if(result != nil){
+                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[IdcheckioObjcUtil resultToJSON:result]] callbackId:callback];
+            } else if(error != nil){
+                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]] callbackId:callback];
+            }
+        }];
     });
-    if(result != nil){
-        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[IdcheckioObjcUtil resultToJSON:result]] callbackId:callback];
-    } else if(error != nil){
-        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]] callbackId:callback];
-    }
 }
 
 @end
-
