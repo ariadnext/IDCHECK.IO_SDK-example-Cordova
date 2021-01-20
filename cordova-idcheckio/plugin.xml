@@ -53,10 +53,10 @@
         <podspec>
             <config>
                 <source url="https://github.com/CocoaPods/Specs.git"/>
-	        <source url="https://git-externe.rennes.ariadnext.com/idcheckio/axt-podspecs.git"/>
-	    </config>
+            	  <source url="https://git-externe.rennes.ariadnext.com/idcheckio/axt-podspecs.git"/>
+            </config>
             <pods use-frameworks="true">
-                <pod name="IDCheckIOSDK" spec="~> 5.9.3-legacy"/>
+                <pod name="IDCheckIOSDK" spec="~> 5.9.3"/>
             </pods>
         </podspec>
         <source-file src="ios/IdcheckioSdk.m" />
