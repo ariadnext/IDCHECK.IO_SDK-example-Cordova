@@ -56,11 +56,11 @@ NSString* callback;
         [self.viewController presentViewController:sdkViewController animated:true completion:^{
             [Idcheckio.shared startWith:cameraView completion:^(NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.viewController dismissViewControllerAnimated:true completion:^{
-                        if(error != nil){
+                    if(error != nil){
+                        [self.viewController dismissViewControllerAnimated:true completion:^{
                             [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]] callbackId:callback];
-                        }
-                    }];
+                        }];
+                    }
                 });
             }];
         }];
@@ -164,11 +164,11 @@ NSString* callback;
         [self.viewController presentViewController:sdkViewController animated:true completion:^{
             [Idcheckio.shared startOnlineWith:cameraView cisContext:cisContext  externalAuthenticationDelegate:nil completion:^(NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.viewController dismissViewControllerAnimated:true completion:^{
-                        if(error != nil){
+                    if(error != nil){
+                        [self.viewController dismissViewControllerAnimated:true completion:^{
                             [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]] callbackId:callback];
-                        }
-                    }];
+                        }];
+                    }
                 });
             }];
         }];
