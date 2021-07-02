@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-idcheckio" version="6.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <name>IDCheck.io SDK Plugin</name>
+
+    <description>Custom plugin simplifying IDCheck.io Sdk integration on a cordova project</description>
+
+    <keywords>cordova,plugin,ariadnext,idcheck.io,sdk</keywords>
+
+    <js-module name="IdcheckioSdk" src="www/idcheckio-sdk.js">
+        <clobbers target="cordova-idcheckio"/>
+    </js-module>
+
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="IdcheckioSdk">
+                <param name="android-package" value="com.ariadnext.idcheckio.IdcheckioSdk" />
+		        <param name="onload" value="true" />
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <activity
+                android:name="com.ariadnext.idcheckio.IdcheckioActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+                android:configChanges="orientation|screenSize|uiMode">
+            </activity>
+        </config-file>
+        <framework custom="true" src="android/sdk.gradle" type="gradleReference" />
+        <source-file src="android/IdcheckioSdk.kt" target-dir="app/src/main/java/com/ariadnext/idcheckio" />
+        <source-file src="android/ParameterUtils.kt" target-dir="app/src/main/java/com/ariadnext/idcheckio" />
+        <source-file src="android/IdcheckioActivity.kt" target-dir="app/src/main/java/com/ariadnext/idcheckio" />
+    </platform>
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="IdcheckioSdk">
+                <param name="ios-package" value="IdcheckioSdk" />
+  		        <param name="onload" value="true" />
+            </feature>
+        </config-file>
+        <podspec>
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git"/>
+            	<source url="https://git-externe.rennes.ariadnext.com/idcheckio/axt-podspecs.git"/>
+            </config>
+            <pods use-frameworks="true">
+                <pod name="IDCheckIOSDK" spec="~> 6.0.0"/>
+            </pods>
+        </podspec>
+        <source-file src="ios/IdcheckioSdk.m" />
+      	<source-file src="ios/IdcheckioSdk.h" />
+        <source-file src="ios/IdcheckioKeys.h" />
+        <source-file src="ios/IdcheckioSdk+Utils.swift" />
+        <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+            <string>Camera is being used to scan documents</string>
+        </config-file>
+    </platform>
+</plugin>
