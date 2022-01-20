@@ -44,7 +44,7 @@
             	<source url="https://git-externe.rennes.ariadnext.com/idcheckio/axt-podspecs.git"/>
             </config>
             <pods use-frameworks="true">
-                <pod name="IDCheckIOSDK" spec="~> 6.0.0"/>
+                <pod name="IDCheckIOSDK" spec="~> 6.1.0"/>
             </pods>
         </podspec>
         <source-file src="ios/IdcheckioSdk.m" />

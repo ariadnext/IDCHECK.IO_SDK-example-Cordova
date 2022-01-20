@@ -41,7 +41,6 @@ object ParameterUtils {
                 "feedbackLevel" -> idcheckioView.feedbackLevel(FeedbackLevel.valueOf(value))
                 "adjustCrop" -> idcheckioView.adjustCrop(value.toBoolean())
                 "maxPictureFilesize" -> idcheckioView.maxPictureFilesize(FileSize.valueOf(value))
-                "token" -> idcheckioView.token(value)
                 "confirmAbort" -> idcheckioView.confirmAbort(value.toBoolean())
                 "onlineConfig" -> {
                     val onlineJson = JSONObject(value)

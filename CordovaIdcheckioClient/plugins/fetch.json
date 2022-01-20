@@ -1,0 +1,10 @@
+{
+  "cordova-plugin-advanced-imagepicker": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-advanced-imagepicker@^1.5.5"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
+}
